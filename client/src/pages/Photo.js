@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import Grid from "@material-ui/core/Grid";
 import MenuItem from "@material-ui/core/MenuItem";
 import MenuList from "@material-ui/core/MenuList";
+import axios from "axios";
 
 import Button from "@material-ui/core/Button";
 
@@ -17,41 +18,43 @@ const photoPageStyle = theme => ({
 });
 
 class PhotoPage extends Component {
-
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
-      file: null
-    }
-    this.handlePhotoChange = this.handlePhotoChange.bind(this)
+      file: null,
+      imageUrl: ""
+    };
+    this.handlePhotoChange = this.handlePhotoChange.bind(this);
   }
 
-  handlePhotoChange(event) {
+  async handlePhotoChange(event) {
+    console.log(event.target.files);
     this.setState({
-      file: URL.createObjectURL(event.target.files[0])
-    })
+      file: event.target.files[0],
+      imageUrl: ""
+    });
   }
 
   handleSubmit = event => {
-    event.preventDefault();
-    console.log(this.state);
-  };
+    let image = this.state.file;
+    let formData = new FormData();
+    formData.append("image", image);
 
-  componentDidMount() {
-    fetch("/welcome")
+    axios
+      .post("/files/image-upload", formData, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+          "Content-Type": "multipart/form-data"
+        }
+      })
       .then(res => {
         console.log(res);
-        if (res.status === 200) return res.json();
-        else throw Error("Couldn't connect to the server");
-      })
-      .then(res => {
-        this.setState({ welcomeMessage: res.welcomeMessage });
-        this.incrementStep();
+        //this.state.imageUrl = res.data.imageUrl;
       })
       .catch(err => {
-        console.log(err.message);
+        console.log({ err });
       });
-  }
+  };
 
   render() {
     const { classes } = this.props;
@@ -82,16 +85,22 @@ class PhotoPage extends Component {
               <form>
                 <Grid container spacing={3}>
                   <Grid item xs={12}>
-                    <img src={this.state.file} />
+                    <img src={this.state.image} alt="" />
                   </Grid>
                   <Grid item xs={12}>
-                    <input type="file" name="pic" accept="image/*" onChange={this.handlePhotoChange} />
+                    <input
+                      type="file"
+                      name="pic"
+                      accept="image/*"
+                      encType="multipart/form-data"
+                      onChange={this.handlePhotoChange}
+                    />
                   </Grid>
                 </Grid>
                 <Grid item xs={12}>
                   <Button variant="contained" onClick={this.handleSubmit}>
                     Submit
-                    </Button>
+                  </Button>
                 </Grid>
               </form>
             </div>

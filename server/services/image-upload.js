@@ -5,15 +5,14 @@ const multerS3 = require("multer-s3");
 const config = require("../config");
 
 aws.config.update({
-  secretAccessKey: config.AWS.SECRET_ACCESS,
-  accessKeyId: config.AWS.ACCESS_KEY,
+  secretAccessKey: config.AWS.SECRET_ACCESS || "test-key",
+  accessKeyId: config.AWS.ACCESS_KEY || "test-key",
   region: "us-west-2"
 });
 
 const s3 = new aws.S3();
 
 const fileFilter = (req, file, cb) => {
-  console.log("file", file);
   if (file.mimetype === "image/jpeg" || file.mimetype === "image/png") {
     cb(null, true);
   } else {

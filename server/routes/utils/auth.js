@@ -10,7 +10,7 @@ module.exports = function authenticate(req, res, next) {
       if (err) {
         throw new Error({ error: "Access denied" });
       } else {
-        req.isLoggedIn = true;
+        req.user = decoded.id;
         next();
       }
     });
