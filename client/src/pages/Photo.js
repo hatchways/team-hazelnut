@@ -48,11 +48,10 @@ class PhotoPage extends Component {
         }
       })
       .then(res => {
-        console.log(res);
-        //this.state.imageUrl = res.data.imageUrl;
+        // res.data.imageUrl has the public image url you can use
       })
       .catch(err => {
-        console.log({ err });
+        console.log(err);
       });
   };
 
