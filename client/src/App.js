@@ -14,6 +14,7 @@ import EditProfilePage from "./pages/EditProfile";
 import ProfilePayment from "./pages/ProfilePayment";
 import MyJobsPage from "./pages/MyJobs";
 import ProfileDetails from "./pages/ProfileDetails";
+import MessagesPage from "./pages/Messages";
 import PrivateRoute from "./pages/PrivateRoute";
 
 // import socket.io client
@@ -27,6 +28,7 @@ function App() {
         <PrivateRoute path='/profile' component={EditProfilePage} />
         <PrivateRoute path="/profile-details/:id" component={ProfileDetails} />
         <PrivateRoute path="/sitter-search" component={ProfileListPage} />
+        <PrivateRoute path="/messages" component={MessagesPage} />
         <Route exact path="/" component={LandingPage} />
         <Route path="/login" component={LoginPage} />
         <Route path="/signup" component={SignUpPage} />
