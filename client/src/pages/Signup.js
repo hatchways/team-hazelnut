@@ -139,7 +139,7 @@ class SignUpPage extends Component {
           const { token } = res.data;
           const decoded = jwt_decode(token);
           localStorage.setItem('jwtToken', token);
-          localStorage.setItem('name', decoded.name);
+          localStorage.setItem('userId', decoded.id);
           this.props.history.push('/');
       })
       .catch(err => {
