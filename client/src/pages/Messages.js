@@ -142,7 +142,7 @@ class MessagesPage extends Component {
         console.log(res.data);
       })
       .catch(err => {
-        console.log(err.response.data.error.message);
+        console.log(err.response.data);
       });
 
     this.socket.emit("message", this.state.message);
@@ -151,8 +151,7 @@ class MessagesPage extends Component {
   
   render() {
     const { classes } = this.props;
-    console.log(this.state.recipientId);
-    
+  
     const message = this.state.messages.map((message, i) => <h2 key={i}>{message}</h2>);
     const converId = this.state.conversations.map((con, i) => 
         <Button 

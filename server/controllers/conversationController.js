@@ -21,7 +21,7 @@ module.exports.createConversation = function(req, res, next) {
 
 // GET all conversations
 module.exports.getConversations = function(req, res, next) {
-    Conversation.find({})
+    Conversation.find({ senderId: req.user })
         .populate("senderId")
         .populate("recipientId")
         .exec(function(err, conversations){
