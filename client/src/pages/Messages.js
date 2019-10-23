@@ -64,6 +64,19 @@ const messagesPageStyle = theme => ({
   button: {
     margin: theme.spacing(1),
   },
+
+  sentMessages: {
+    textAlign: "right",
+    paddingRight:"10px",
+    paddingTop: "10px"
+  },
+  sentMessageLength: {
+    textAlign: "right",
+    backgroundColor: "white",
+    boxShadow: "0px 0px 4px 0px lightgrey",
+    borderRadius: "10px",
+    padding: "12px"
+  }
 });
 
 class MessagesPage extends Component {
@@ -151,8 +164,7 @@ class MessagesPage extends Component {
   
   render() {
     const { classes } = this.props;
-  
-    const message = this.state.messages.map((message, i) => <h2 key={i}>{message}</h2>);
+    const message = this.state.messages.map((message, i) => <p key={i}><span className={classes.sentMessageLength}>{message}</span></p> );
     const converId = this.state.conversations.map((con, i) => 
         <Button 
           color="primary" 
@@ -216,7 +228,9 @@ class MessagesPage extends Component {
             </Grid>
             <Grid container className={classes.messagesArea}>
               <Grid item xs={12}>
+                <div className={classes.sentMessages}>
                 {message}
+                </div>
               </Grid>
             </Grid>
             <Grid container className={classes.messagingArea}>
