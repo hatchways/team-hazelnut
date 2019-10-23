@@ -16,22 +16,20 @@ import TextField from "@material-ui/core/TextField";
 import Button from '@material-ui/core/Button';
 import axios from "axios";
 
+
+
 // import socket.io client
 import openSocket from 'socket.io-client';
 
-
-
 const messagesPageStyle = theme => ({
-  root: {
-    width: "100%",
-    maxWidth: 360,
-    backgroundColor: theme.palette.background.paper
-  },
+  list: {
+    maxHeight: "81vh",
+    overflow: "auto"
 
+  },
   cardStyle: {
     height: "82vh"
   },
-
   bigAvatar: {
     width: 50,
     height: 50,
@@ -39,7 +37,6 @@ const messagesPageStyle = theme => ({
     marginTop: "5px",
     marginLeft: "10px"
   },
-
   title: {
     border: "0.5px solid #e6e6e6",
     textAlign: "center"
@@ -48,24 +45,29 @@ const messagesPageStyle = theme => ({
     border: "0.5px solid #e6e6e6",
     borderRight: "0px"
   },
-
   messagesArea: {
     height: "70vh",
     border: "1px solid red"
   },
-
   messagingArea: {
-    height: "12vh",
     border: "1px solid #e6e6e6"
   },
-
   textField: {
-    width: "70%"
-  },
-  button: {
-    margin: theme.spacing(1),
-  },
+    width: "100%",
+    paddingLeft: "10px"
 
+  },
+  input1: {
+    height: "8vh"
+  },
+  buttonContainer: {
+    height: "100%",
+  },
+  sendButton: {
+    margin: theme.spacing(1),
+    top: "30%",
+    backgroundColor: "#f04040"
+  },
   sentMessages: {
     textAlign: "right",
     paddingRight:"10px",
@@ -182,29 +184,25 @@ class MessagesPage extends Component {
   
   render() {
     const { classes } = this.props;
-<<<<<<< HEAD
     const ids = this.state.recipientIds.map((id) => {
       return id
     })
     console.log(ids);
-    // console.log(this.state.conversations);
-    // console.log(this.state.recipientIds);
+    console.log(this.state.conversations);
+    console.log(this.state.recipientIds);
     // console.log(this.state.recipientProfiles);
-  
-    const message = this.state.messages.map((message, i) => <h2 key={i}>{message}</h2>);
-=======
     const message = this.state.messages.map((message, i) => <p key={i}><span className={classes.sentMessageLength}>{message}</span></p> );
->>>>>>> 7c7d33b6f8cb32b35126c34ed3777c70971899aa
-    const converId = this.state.conversations.map((con, i) => 
-        <Button 
-          color="primary" 
-          variant="contained" 
-          key={i} 
-          id={con._id} 
-          onClick={this.getConversationId}
-        >
-          {con.recipientId.name}
-        </Button>);
+
+    // const converId = this.state.conversations.map((con, i) => 
+    //     <Button 
+    //       color="primary" 
+    //       variant="contained" 
+    //       key={i} 
+    //       id={con._id} 
+    //       onClick={this.getConversationId}
+    //     >
+    //       {con.recipientId.name}
+    //     </Button>);
   
     return (
       <div>
@@ -217,29 +215,27 @@ class MessagesPage extends Component {
               </Grid>
               <Grid item xs={12}>
                 <Card className={classes.cardStyle}>
-                 {converId} 
-                  <List className={classes.root} >
-                    {/* {this.state.profiles.map((profile, key) =>  */}
-                        <ListItem alignItems="flex-start" button onClick={this.createConversation}>
-                            <ListItemAvatar temAvatar   >
-                              <Avatar
-                                alt="Remy Sharp"
-                                src={require("../images/07cc6abd390ab904abbf31db5e6ea20357f8b127.png")}
-                              />
-                            </ListItemAvatar>
-                            <ListItemText
-                             
-                              primary='Name'
-                              secondary={
-                                <React.Fragment>
-                                  I'll be in your neighborhood doing errands this…
-                                </React.Fragment>
-                              }
-                            />
-                        </ListItem >
-                    {/* )}     */}
+                  <List className={classes.list}>
+                    <ListItem alignItems="flex-start">
+                      <ListItemAvatar>
+                        <Avatar
+                          alt="Remy Sharp"
+                          src={require("../images/07cc6abd390ab904abbf31db5e6ea20357f8b127.png")}
+                        />
+                      </ListItemAvatar>
+                      <ListItemText
+                        primary="Mc Barkly"
+                        secondary={
+                          <React.Fragment>
+                            I'll be in your neighborhood doing errands this…
+                          </React.Fragment>
+                        }
+                      />
+                    </ListItem>
+                    <Divider />
                   </List>
                 </Card>
+                
               </Grid>
             </Grid>
           </Grid>
@@ -253,38 +249,47 @@ class MessagesPage extends Component {
                 />
               </Grid>
               <Grid item xs={11}>
-                <h3>Name</h3>
+                <h3>NAME</h3>
               </Grid>
             </Grid>
             <Grid container className={classes.messagesArea}>
               <Grid item xs={12}>
+                {/* <h1>Test</h1> */}
                 <div className={classes.sentMessages}>
                 {message}
                 </div>
               </Grid>
             </Grid>
             <Grid container className={classes.messagingArea}>
-              <Grid item xs={12}>
+              <Grid item xs={8}>
                 <TextField
                   id="standard-bare"
                   name="message"
-                  value={this.state.message}
                   className={classes.textField}
-                  placeholder="Type message here..."
+                  placeholder="Reply to Mc Barkly"
                   margin="normal"
-                  inputProps={{ "aria-label": "bare" }}
+                  value={this.state.message}
                   onChange={this.messageChange}
+                  inputProps={{ "aria-label": "bare", className: classes.input1 }}
                 />
+              </Grid>
+              <Grid item xs={1}></Grid>
+              <Grid item xs={2}>
+                <div className={classes.buttonContainer}>
                 <Button 
-                  variant="contained" 
-                  color="secondary" 
-                  type="submit"
-                  className={classes.button}
+                variant="contained" 
+                color="primary" 
+                type="submit"
+                fullWidth 
+                className={classes.sendButton}
                   onClick={this.createMessage}
                 >
                   Send
                 </Button>
-              </Grid>
+                </div>
+              <Grid item xs={1}></Grid>
+              
+            </Grid>
             </Grid>
           </Grid>
         </Grid>
