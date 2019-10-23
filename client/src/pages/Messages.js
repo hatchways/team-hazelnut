@@ -103,7 +103,6 @@ class MessagesPage extends Component {
       this.setState({ messages: [...this.state.messages, msg]});
     });
     this.getConversations();
-    this.getRecipientProfiles();
   };
   
   // GET a list of conversations
@@ -114,30 +113,24 @@ class MessagesPage extends Component {
           conversations: res.data    // Get all conversation
         });
         // save recipient Ids to get their profiles
-        res.data.map(con => {
-          this.setState({ recipientIds: [...this.state.recipientIds, con.recipientId._id]});
-        })  
+        res.data.map(item => {
+          this.setState({ recipientIds: [...this.state.recipientIds, item.recipientId._id]});
+        });
+        const axiosArray = this.state.recipientIds.map(id =>
+          axios.get(`/profile/get/${id}`, { headers: { Authorization: `Bearer ${this.state.token}` }} )
+        ) 
+        axios.all(axiosArray)
+          .then(res => {
+            res.map(r => this.setState({ recipientProfiles: [...this.state.recipientProfiles, r.data.profile] }));
+          })
+          .catch(err => {
+            console.log(err);
+          }); 
       })
       .catch(err => {
         console.log("Error fetching and parsing data", err);
       }) 
   }
-
-  // GET a list of recipient profiles
-  getRecipientProfiles() {
-    let axiosArray = this.state.recipientIds.map(id => 
-      axios.get(`/profile/get/${id}`, { headers: { Authorization: `Bearer ${this.state.token}` } }));
-    
-    axios.all(axiosArray)
-      .then(res => {
-        res.data.map(profile => {
-          this.setState({ recipientProfiles: [...this.state.recipientProfiles, profile] });
-        })
-      })
-      .catch(err => {
-        console.log(err);
-      }); 
-  };
 
   // Handle message change
   messageChange = e => {
@@ -184,26 +177,8 @@ class MessagesPage extends Component {
   
   render() {
     const { classes } = this.props;
-    const ids = this.state.recipientIds.map((id) => {
-      return id
-    })
-    console.log(ids);
-    console.log(this.state.conversations);
-    console.log(this.state.recipientIds);
-    // console.log(this.state.recipientProfiles);
     const message = this.state.messages.map((message, i) => <p key={i}><span className={classes.sentMessageLength}>{message}</span></p> );
 
-    // const converId = this.state.conversations.map((con, i) => 
-    //     <Button 
-    //       color="primary" 
-    //       variant="contained" 
-    //       key={i} 
-    //       id={con._id} 
-    //       onClick={this.getConversationId}
-    //     >
-    //       {con.recipientId.name}
-    //     </Button>);
-  
     return (
       <div>
         <NavigationBar></NavigationBar>
