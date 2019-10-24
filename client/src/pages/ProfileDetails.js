@@ -74,6 +74,7 @@ const initalState = {
 class ProfileDetails extends Component {
 
     state = initalState;
+    loggedUserId = localStorage.getItem("userId");
 
     constructor(props) {
         super(props)
@@ -86,18 +87,43 @@ class ProfileDetails extends Component {
         axios.get(`/profile/get/${this.props.match.params.id}`, { headers: { Authorization: `Bearer ${token}` } })
         .then(res => {
             this.setState({
-                profile: res.data.profile
+                profile: res.data.profile,
+               
+                // userId: loggedUserId,
+                
             });
+            console.log(this.state.profile);
+            // console.log(res);
+            // console.log(this.state.userId);
+            // console.log(this.state);
         })
         .catch(err => {
             console.log("Error fetching and parsing data", err);
         });
+
+        // console.log(this.state.status);
     }
 
-    sendingRequest(){
-        const token = localStorage.getItem("jwtToken");
+startDate = event => {
+    console.log(event.target.value);
+    this.state.user.startDate = event.target.value;
+}
 
-        axios.post(`/user/sendrequest`, this.state.user, { headers: { Authorization: `Bearer ${token}` } })
+endDate = event => {
+    console.log(event.target.value);
+    this.state.user.endDate = event.target.value;
+
+}
+
+    sendingRequest = event => {
+        const token = localStorage.getItem("jwtToken");
+        console.log(this.state);
+        this.state.user.userId = this.loggedUserId;
+        this.state.user.status = "sent";
+        this.state.user.paid = 0;
+        this.state.user.requestedUserId = this.state.profile.userId;
+        console.log(this.state);
+         axios.post(`/users/sendrequest`, this.state.user, { headers: { Authorization: `Bearer ${token}` } })
         .then(res => {
             this.setState({
                 user: res.data
@@ -106,6 +132,7 @@ class ProfileDetails extends Component {
         .catch(err => {
             console.log("Error fetching and parsing data", err);
         });
+
     }
     
     render() {
@@ -197,6 +224,7 @@ class ProfileDetails extends Component {
                                         label="Drop In"
                                         type="datetime-local"
                                         defaultValue="2019-05-24T10:30"
+                                        onChange={this.startDate}
                                         InputLabelProps={{
                                             shrink: true,
                                         }}
@@ -208,6 +236,7 @@ class ProfileDetails extends Component {
                                         label="Drop Out"
                                         type="datetime-local"
                                         defaultValue="2019-05-24T10:30"
+                                        onChange={this.endDate}
                                         InputLabelProps={{
                                             shrink: true,
                                         }}
@@ -219,6 +248,13 @@ class ProfileDetails extends Component {
                                         </Button>
                                 </Grid>
                             </Grid>
+
+
+
+
+
+
+                            
                         </Box>
                         <Grid item spacing={4} className={classes.marginBottom}>
                             <Grid container direction="column" align="center" className={classes.marginBottom}>

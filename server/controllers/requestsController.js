@@ -7,7 +7,8 @@ module.exports.createRequest = async function(req, res, next) {
     startDate: req.body.startDate,
     endDate: req.body.endDate,
     status: req.body.status,
-    paid: req.body.paid
+    paid: req.body.paid,
+    amount: req.body.amount
   };
 
   //check if this request alredy exists
