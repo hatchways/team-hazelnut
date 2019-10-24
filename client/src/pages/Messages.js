@@ -9,17 +9,21 @@ import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import Avatar from "@material-ui/core/Avatar";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
-import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
 import Card from "@material-ui/core/Card";
 import TextField from "@material-ui/core/TextField";
-import Button from '@material-ui/core/Button';
+import Button from "@material-ui/core/Button";
 import axios from "axios";
-
-
+import AddBoxIcon from "@material-ui/icons/AddBox";
 
 // import socket.io client
-import openSocket from 'socket.io-client';
+import openSocket from "socket.io-client";
+
+import IconButton from "@material-ui/core/IconButton";
+import Modal from "@material-ui/core/Modal";
+import Backdrop from "@material-ui/core/Backdrop";
+import Fade from "@material-ui/core/Fade";
+
 
 const messagesPageStyle = theme => ({
   list: {
@@ -79,6 +83,25 @@ const messagesPageStyle = theme => ({
     boxShadow: "0px 0px 4px 0px lightgrey",
     borderRadius: "10px",
     padding: "12px"
+  },
+  test: {
+    backgroundColor: "white",
+    boxShadow: "0px 0px 4px 0px lightgrey",
+    borderRadius: "10px",
+    padding: "12px"
+  },
+  modal: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center"
+  },
+  paper: {
+    maxHeight: "75vh",
+    overflow: "auto",
+    backgroundColor: theme.palette.background.paper,
+    border: "none",
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing(2, 4, 3)
   }
 });
 
@@ -94,6 +117,16 @@ class MessagesPage extends Component {
       recipientProfiles: [],
       token: localStorage.getItem("jwtToken")
     }
+    this.handleOpen = this.handleOpen.bind(this);
+    this.handleClose = this.handleClose.bind(this);
+  }
+
+  handleOpen() {
+    this.setState({ open: true });
+  }
+
+  handleClose() {
+    this.setState({ open: false });
   }
 
   componentDidMount() {
@@ -164,7 +197,6 @@ class MessagesPage extends Component {
       }); 
   }
 
-  
   // Handle create a new message
   createMessage = e => {
     e.preventDefault();
@@ -199,38 +231,59 @@ class MessagesPage extends Component {
         <Grid container>
           <Grid item xs={3}>
             <Grid container>
-              <Grid item xs={12} className={classes.title}>
+              <Grid item xs={11} className={classes.title}>
                 <h3>Inbox Messages</h3>
+              </Grid>
+              <Grid item xs={1} className={classes.title}>
+                <IconButton size="small" className={classes.addIcon}>
+                  <AddBoxIcon onClick={this.handleOpen} />
+                </IconButton>
+                <Modal
+                  aria-labelledby="transition-modal-title"
+                  aria-describedby="transition-modal-description"
+                  className={classes.modal}
+                  open={this.state.open}
+                  onClose={this.handleClose}
+                  closeAfterTransition
+                  BackdropComponent={Backdrop}
+                  BackdropProps={{
+                    timeout: 500
+                  }}
+                >
+                  <Fade in={this.state.open}>
+                    <div className={classes.paper}>
+                      <h2 id="transition-modal-title">Dog Sitters</h2>
+                      <p id="transition-modal-description">
+                        react-transition-group animates me.
+                      </p>
+                    </div>
+                  </Fade>
+                </Modal>
               </Grid>
               <Grid item xs={12}>
                 <Card className={classes.cardStyle}>
-
-                { this.state.conversations.map(item => (
                   <List className={classes.list}>
-                    <ListItem alignItems="flex-start" button>
-                      <ListItemAvatar>
-                        <Avatar
-                          alt="Remy Sharp"
+                    {this.state.conversations.map(item => (
+                      <ListItem alignItems="flex-start" button onClick={this.getConversationId}>
+                        <ListItemAvatar>
+                          <Avatar
+                            alt="Remy Sharp"
+                          />
+                        </ListItemAvatar>
+                        <ListItemText
+                          primary={item.recipientId.name}
+                          secondary={
+                            <React.Fragment>
+                              "sent text is here..."
+                            </React.Fragment>
+                          }
                         />
-                      </ListItemAvatar>
-                      <ListItemText
-                        primary={item.recipientId.name}
-                        secondary={
-                          <React.Fragment>
-                            I'll be in your neighborhood doing errands this…
-                          </React.Fragment>
-                        }
-                        id={item._id}
-                        key={item._id}
-                        onClick={this.getConversationId}
-                      />
-                    </ListItem>
+                      </ListItem>
+                    ))}
+                    
                     <Divider />
                   </List>
-                 ))}
-                    
                 </Card>
-                
               </Grid>
             </Grid>
           </Grid>
@@ -249,10 +302,7 @@ class MessagesPage extends Component {
             </Grid>
             <Grid container className={classes.messagesArea}>
               <Grid item xs={12}>
-                {/* <h1>Test</h1> */}
-                <div className={classes.sentMessages}>
-                {message}
-                </div>
+                <div className={classes.sentMessages}>{message}</div>
               </Grid>
             </Grid>
             <Grid container className={classes.messagingArea}>
@@ -265,26 +315,28 @@ class MessagesPage extends Component {
                   margin="normal"
                   value={this.state.message}
                   onChange={this.messageChange}
-                  inputProps={{ "aria-label": "bare", className: classes.input1 }}
+                  inputProps={{
+                    "aria-label": "bare",
+                    className: classes.input1
+                  }}
                 />
               </Grid>
               <Grid item xs={1}></Grid>
               <Grid item xs={2}>
                 <div className={classes.buttonContainer}>
-                <Button 
-                variant="contained" 
-                color="primary" 
-                type="submit"
-                fullWidth 
-                className={classes.sendButton}
-                  onClick={this.createMessage}
-                >
-                  Send
-                </Button>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    type="submit"
+                    fullWidth
+                    className={classes.sendButton}
+                    onClick={this.createMessage}
+                  >
+                    Send
+                  </Button>
                 </div>
-              <Grid item xs={1}></Grid>
-              
-            </Grid>
+                <Grid item xs={1}></Grid>
+              </Grid>
             </Grid>
           </Grid>
         </Grid>

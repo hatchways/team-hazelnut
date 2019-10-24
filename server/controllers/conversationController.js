@@ -1,5 +1,6 @@
 import Conversation from "../models/Conversation";
 import Message from "../models/Message";
+import Profile from "../models/Profile";
 
 
 // POST a conversation (new conversation)
@@ -21,15 +22,18 @@ module.exports.createConversation = function(req, res, next) {
 
 // GET all conversations
 module.exports.getConversations = function(req, res, next) {
+    const json ={};
     Conversation.find({ senderId: req.user })
         .populate("senderId")
         .populate("recipientId")
         .exec(function(err, conversations){
             if (err) return next(err);
-            if (!conversations) {
-                return res.status(400).json({ message: "There is no conversations" });
-            }
-            res.json(conversations);
+            json = json.conversations;
+        });
+        Profile.find({ userId: recipientId }, function(err, profile) {
+            if (err) return next(err);
+            json = json.profile;
+            res.json(json);
         });
 };
 
