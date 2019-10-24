@@ -7,7 +7,7 @@ import Profile from "../models/Profile";
 module.exports.createConversation = function(req, res, next) {
     const conversation = new Conversation({
         senderId : req.user,
-        recipientId : req.body.recipientId
+        recipientId : req.body.recipientId,
     });
     if (!conversation.recipientId) {
         return res.status(400).json({ message: "Please select recipient"});
@@ -19,21 +19,24 @@ module.exports.createConversation = function(req, res, next) {
     }
 };
 
-
-// GET all conversations
 module.exports.getConversations = function(req, res, next) {
-    const json ={};
+    var arr = [];
     Conversation.find({ senderId: req.user })
         .populate("senderId")
         .populate("recipientId")
         .exec(function(err, conversations){
             if (err) return next(err);
-            json = json.conversations;
-        });
-        Profile.find({ userId: recipientId }, function(err, profile) {
-            if (err) return next(err);
-            json = json.profile;
-            res.json(json);
+            conversations.map(item => {
+                console.log(item["recipientId"]["_id"]);
+                Profile.find({ userId: item["recipientId"]["_id"] }, function(err, profile) {
+                    if (err) return next(err);
+                    item.recip_profile = profile;
+                    console.log(item);
+                    return item
+                });
+                arr.push(item);
+            });
+            res.json(arr);
         });
 };
 

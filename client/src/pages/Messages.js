@@ -16,6 +16,9 @@ import Button from "@material-ui/core/Button";
 import axios from "axios";
 import AddBoxIcon from "@material-ui/icons/AddBox";
 
+import Typography from "@material-ui/core/Typography";
+
+
 // import socket.io client
 import openSocket from "socket.io-client";
 
@@ -29,7 +32,6 @@ const messagesPageStyle = theme => ({
   list: {
     maxHeight: "81vh",
     overflow: "auto"
-
   },
   cardStyle: {
     height: "82vh"
@@ -59,7 +61,6 @@ const messagesPageStyle = theme => ({
   textField: {
     width: "100%",
     paddingLeft: "10px"
-
   },
   input1: {
     height: "8vh"
@@ -221,8 +222,6 @@ class MessagesPage extends Component {
     const message = this.state.messages.map((message, i) => 
       <p key={i}><span className={classes.sentMessageLength}>{message}</span></p>
     );
-    // console.log(this.state.conversations);
-    // console.log(this.state.recipientProfiles);
     console.log(this.state.conversationId);
 
     return (
@@ -263,25 +262,25 @@ class MessagesPage extends Component {
               <Grid item xs={12}>
                 <Card className={classes.cardStyle}>
                   <List className={classes.list}>
+
                     {this.state.conversations.map(item => (
-                      <ListItem alignItems="flex-start" button onClick={this.getConversationId}>
-                        <ListItemAvatar>
-                          <Avatar
-                            alt="Remy Sharp"
-                          />
-                        </ListItemAvatar>
-                        <ListItemText
-                          primary={item.recipientId.name}
-                          secondary={
-                            <React.Fragment>
-                              "sent text is here..."
-                            </React.Fragment>
-                          }
+                      <ListItem 
+                        alignItems="flex-start" 
+                        button 
+                        onClick={this.getConversationId}
+                        id={item._id}
+                        key={item._id}
+                      >
+                        <Avatar
+                          alt="Remy Sharp"
                         />
-                      </ListItem>
+                        <Typography variant="subtitle1" >
+                          {item.recipientId.name}
+                        </Typography>
+                        <Divider />
+                      </ListItem> 
                     ))}
-                    
-                    <Divider />
+
                   </List>
                 </Card>
               </Grid>
