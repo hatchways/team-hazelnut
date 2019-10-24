@@ -27,6 +27,8 @@ io.on('connection', function (socket) {
   console.log('A client is connected!');
   socket.on("message", msg => {
     io.emit("message", msg);
+    //broadcast message to everyone in port:3000 except yourself.
+    socket.broadcast.emit("received", { message: msg  });
   });
 });
 

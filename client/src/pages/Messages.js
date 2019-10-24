@@ -47,7 +47,7 @@ const messagesPageStyle = theme => ({
   },
   messagesArea: {
     height: "70vh",
-    border: "1px solid red"
+    border: "1px solid #e6e6e6"
   },
   messagingArea: {
     border: "1px solid #e6e6e6"
@@ -92,8 +92,7 @@ class MessagesPage extends Component {
       conversationId: "",
       recipientIds: [],
       recipientProfiles: [],
-      token: localStorage.getItem("jwtToken"),
-      userId: localStorage.getItem("userId")
+      token: localStorage.getItem("jwtToken")
     }
   }
 
@@ -119,6 +118,7 @@ class MessagesPage extends Component {
         const axiosArray = this.state.recipientIds.map(id =>
           axios.get(`/profile/get/${id}`, { headers: { Authorization: `Bearer ${this.state.token}` }} )
         ) 
+        // Call another GET request to get recipients profiles
         axios.all(axiosArray)
           .then(res => {
             res.map(r => this.setState({ recipientProfiles: [...this.state.recipientProfiles, r.data.profile] }));
@@ -129,8 +129,9 @@ class MessagesPage extends Component {
       })
       .catch(err => {
         console.log("Error fetching and parsing data", err);
-      }) 
+      }); 
   }
+
 
   // Handle message change
   messageChange = e => {
@@ -154,7 +155,15 @@ class MessagesPage extends Component {
   // Handle get a conversation Id to start sending messages
   getConversationId = e => {
     this.setState({ conversationId: e.target.id });
+    axios.get(`/conversation/${this.state.conversationId}`, { headers: { Authorization: `Bearer ${this.state.token}` }} )
+      .then(res => {
+        res.data.map(item => this.setState({ messages: [...this.state.messages, item.body] }))
+      })
+      .catch(err => {
+        console.log(err);
+      }); 
   }
+
   
   // Handle create a new message
   createMessage = e => {
@@ -177,7 +186,12 @@ class MessagesPage extends Component {
   
   render() {
     const { classes } = this.props;
-    const message = this.state.messages.map((message, i) => <p key={i}><span className={classes.sentMessageLength}>{message}</span></p> );
+    const message = this.state.messages.map((message, i) => 
+      <p key={i}><span className={classes.sentMessageLength}>{message}</span></p>
+    );
+    // console.log(this.state.conversations);
+    // console.log(this.state.recipientProfiles);
+    console.log(this.state.conversationId);
 
     return (
       <div>
@@ -190,25 +204,31 @@ class MessagesPage extends Component {
               </Grid>
               <Grid item xs={12}>
                 <Card className={classes.cardStyle}>
+
+                { this.state.conversations.map(item => (
                   <List className={classes.list}>
-                    <ListItem alignItems="flex-start">
+                    <ListItem alignItems="flex-start" button>
                       <ListItemAvatar>
                         <Avatar
                           alt="Remy Sharp"
-                          src={require("../images/07cc6abd390ab904abbf31db5e6ea20357f8b127.png")}
                         />
                       </ListItemAvatar>
                       <ListItemText
-                        primary="Mc Barkly"
+                        primary={item.recipientId.name}
                         secondary={
                           <React.Fragment>
                             I'll be in your neighborhood doing errands this…
                           </React.Fragment>
                         }
+                        id={item._id}
+                        key={item._id}
+                        onClick={this.getConversationId}
                       />
                     </ListItem>
                     <Divider />
                   </List>
+                 ))}
+                    
                 </Card>
                 
               </Grid>
