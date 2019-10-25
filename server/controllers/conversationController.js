@@ -22,21 +22,19 @@ module.exports.createConversation = function(req, res, next) {
 module.exports.getConversations = function(req, res, next) {
     var arr = [];
     Conversation.find({ senderId: req.user })
-        .populate("senderId")
         .populate("recipientId")
         .exec(function(err, conversations){
             if (err) return next(err);
             conversations.map(item => {
-                console.log(item["recipientId"]["_id"]);
                 Profile.find({ userId: item["recipientId"]["_id"] }, function(err, profile) {
                     if (err) return next(err);
-                    item.recip_profile = profile;
-                    console.log(item);
-                    return item
+                    const inside = [];
+                    inside.push(item);
+                    inside.push(profile[0]);
+                    arr.push(inside);
                 });
-                arr.push(item);
             });
-            res.json(arr);
+            res.json(conversations);
         });
 };
 

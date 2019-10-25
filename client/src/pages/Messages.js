@@ -18,7 +18,6 @@ import AddBoxIcon from "@material-ui/icons/AddBox";
 
 import Typography from "@material-ui/core/Typography";
 
-
 // import socket.io client
 import openSocket from "socket.io-client";
 
@@ -83,13 +82,8 @@ const messagesPageStyle = theme => ({
     backgroundColor: "white",
     boxShadow: "0px 0px 4px 0px lightgrey",
     borderRadius: "10px",
-    padding: "12px"
-  },
-  test: {
-    backgroundColor: "white",
-    boxShadow: "0px 0px 4px 0px lightgrey",
-    borderRadius: "10px",
-    padding: "12px"
+    padding: "12px",
+    
   },
   modal: {
     display: "flex",
@@ -113,9 +107,8 @@ class MessagesPage extends Component {
       conversations: [],
       message: "",
       messages: [],
+
       conversationId: "",
-      recipientIds: [],
-      recipientProfiles: [],
       token: localStorage.getItem("jwtToken")
     }
     this.handleOpen = this.handleOpen.bind(this);
@@ -137,7 +130,7 @@ class MessagesPage extends Component {
     });
     this.getConversations();
   };
-  
+
   // GET a list of conversations
   getConversations() {
     axios.get('/conversation/list/', { headers: { Authorization: `Bearer ${this.state.token}` }})
@@ -145,21 +138,6 @@ class MessagesPage extends Component {
         this.setState({
           conversations: res.data    // Get all conversation
         });
-        // save recipient Ids to get their profiles
-        res.data.map(item => {
-          this.setState({ recipientIds: [...this.state.recipientIds, item.recipientId._id]});
-        });
-        const axiosArray = this.state.recipientIds.map(id =>
-          axios.get(`/profile/get/${id}`, { headers: { Authorization: `Bearer ${this.state.token}` }} )
-        ) 
-        // Call another GET request to get recipients profiles
-        axios.all(axiosArray)
-          .then(res => {
-            res.map(r => this.setState({ recipientProfiles: [...this.state.recipientProfiles, r.data.profile] }));
-          })
-          .catch(err => {
-            console.log(err);
-          }); 
       })
       .catch(err => {
         console.log("Error fetching and parsing data", err);
@@ -191,6 +169,7 @@ class MessagesPage extends Component {
     this.setState({ conversationId: e.target.id });
     axios.get(`/conversation/${this.state.conversationId}`, { headers: { Authorization: `Bearer ${this.state.token}` }} )
       .then(res => {
+        console.log(res.data);
         res.data.map(item => this.setState({ messages: [...this.state.messages, item.body] }))
       })
       .catch(err => {
@@ -222,7 +201,6 @@ class MessagesPage extends Component {
     const message = this.state.messages.map((message, i) => 
       <p key={i}><span className={classes.sentMessageLength}>{message}</span></p>
     );
-    console.log(this.state.conversationId);
 
     return (
       <div>

@@ -81,40 +81,44 @@ class NavigationBar extends Component {
     let buttons;
 
     if (this.state.token) {
-      buttons = <div>
-                  <Button component={Link} to={"/profile"}>BECOME A SITTER</Button>
-                  <Button component={Link} to={"/sitter-search"}>My Sitters</Button>
-                  <NotificationButton></NotificationButton>
-                  <Button component={Link} to={"/messages"}>Messages</Button>
-                  <IconButton aria-label="avatar" onClick={this.handleClick}>
-                    <Avatar alt="Remy Sharp" src={profile.photoUrl}/>
-                  </IconButton>
-                  <Menu
-                        id="menu-appbar"
-                        anchorEl={anchorEl}
-                        anchorOrigin={{
-                          vertical: 'bottom',
-                          horizontal: 'right',
-                        }}
-                        keepMounted
-                        transformOrigin={{
-                          vertical: 'top',
-                          horizontal: 'right',
-                        }}
-                        open={open}
-                        onClose={this.handleClose}
-                      >
-                        <MenuItem><a href="/profile">Profile</a></MenuItem>
-                        <MenuItem onClick={this.handleClose}>My account</MenuItem>
-                        <MenuItem onClick={this.handleLogout}>Log Out</MenuItem>
-                  </Menu>
-                </div> 
+      buttons = (
+        <div>
+          <Button component={Link} to={"/profile"}>BECOME A SITTER</Button>
+          <Button component={Link} to={"/sitter-search"}>My Sitters</Button>
+          <NotificationButton></NotificationButton>
+          <Button component={Link} to={"/messages"}>Messages</Button>
+          <IconButton aria-label="avatar" onClick={this.handleClick}>
+            <Avatar alt="Remy Sharp" src={profile.photoUrl}/>
+          </IconButton>
+          <Menu
+                id="menu-appbar"
+                anchorEl={anchorEl}
+                anchorOrigin={{
+                  vertical: 'bottom',
+                  horizontal: 'right',
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                open={open}
+                onClose={this.handleClose}
+              >
+                <MenuItem><a href="/profile">Profile</a></MenuItem>
+                <MenuItem onClick={this.handleClose}>My account</MenuItem>
+                <MenuItem onClick={this.handleLogout}>Log Out</MenuItem>
+          </Menu>
+        </div> 
+      );        
     } else {
-      buttons = <div>
-                  <Button className={classes.menuButton} color="inherit" component={Link} to={"/profile"}>BECOME A SITTER</Button>
-                  <Button className={classes.menuButton} variant="outlined" color="secondary" component={Link} to={"/login"}>Log In</Button>
-                  <Button variant="contained" color="secondary" component={Link} to={"/signup"}>Sign Up</Button>
-                </div>
+      buttons = (
+        <div>
+          <Button className={classes.menuButton} color="inherit" component={Link} to={"/profile"}>BECOME A SITTER</Button>
+          <Button className={classes.menuButton} variant="outlined" color="secondary" component={Link} to={"/login"}>Log In</Button>
+          <Button variant="contained" color="secondary" component={Link} to={"/signup"}>Sign Up</Button>
+        </div>
+      );
     }
 
     return (
