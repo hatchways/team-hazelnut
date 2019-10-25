@@ -3,9 +3,6 @@ import "../App.scss";
 import NavigationBar from "./Navbar";
 import { withStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
-
-import ListItemText from "@material-ui/core/ListItemText";
-import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import Avatar from "@material-ui/core/Avatar";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
@@ -25,8 +22,6 @@ import IconButton from "@material-ui/core/IconButton";
 import Modal from "@material-ui/core/Modal";
 import Backdrop from "@material-ui/core/Backdrop";
 import Fade from "@material-ui/core/Fade";
-import { typography } from "@material-ui/system";
-
 
 const messagesPageStyle = theme => ({
   list: {
@@ -238,8 +233,8 @@ class MessagesPage extends Component {
                 <h3>Inbox Messages</h3>
               </Grid>
               <Grid item xs={1} className={classes.title}>
-                <IconButton size="small" className={classes.addIcon}>
-                  <AddBoxIcon onClick={this.handleOpen} />
+                <IconButton size="small" className={classes.addIcon} onClick={this.handleOpen}>
+                  <AddBoxIcon  />
                 </IconButton>
                 <Modal
                   aria-labelledby="transition-modal-title"
@@ -256,8 +251,8 @@ class MessagesPage extends Component {
                   <Fade in={this.state.open}>
                     <div className={classes.paper}>
 
-                      {this.state.profiles.map(profile => (
-                        <Card className={classes.card}>
+                      {this.state.profiles.map((profile, i) => (
+                        <Card className={classes.card} key={i}>
                           <Grid container wrap="nowrap" spacing={2}>
                             <Grid item>
                               <Avatar className={classes.image}>
