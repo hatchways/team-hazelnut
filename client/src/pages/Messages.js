@@ -25,6 +25,7 @@ import IconButton from "@material-ui/core/IconButton";
 import Modal from "@material-ui/core/Modal";
 import Backdrop from "@material-ui/core/Backdrop";
 import Fade from "@material-ui/core/Fade";
+import { typography } from "@material-ui/system";
 
 
 const messagesPageStyle = theme => ({
@@ -97,7 +98,20 @@ const messagesPageStyle = theme => ({
     border: "none",
     boxShadow: theme.shadows[5],
     padding: theme.spacing(2, 4, 3)
-  }
+  },
+  card: {
+    boxShadow: 'none',
+  },
+  image: {
+    width: 50,
+    height: 50,
+  },
+  img: {
+    margin: 'auto',
+    display: 'block',
+    maxWidth: '100%',
+    maxHeight: '100%',
+  },
 });
 
 class MessagesPage extends Component {
@@ -107,8 +121,8 @@ class MessagesPage extends Component {
       conversations: [],
       message: "",
       messages: [],
-
       conversationId: "",
+      profiles: [],
       token: localStorage.getItem("jwtToken")
     }
     this.handleOpen = this.handleOpen.bind(this);
@@ -129,6 +143,7 @@ class MessagesPage extends Component {
       this.setState({ messages: [...this.state.messages, msg]});
     });
     this.getConversations();
+    this.getProfiles();
   };
 
   // GET a list of conversations
@@ -144,6 +159,18 @@ class MessagesPage extends Component {
       }); 
   }
 
+  // GET list of user profiles
+  getProfiles() {
+    axios.get("/profile/get", { headers: { Authorization: `Bearer ${this.state.token}` }})
+      .then(res => {
+        this.setState({
+          profiles: res.data.profile
+        });
+      })
+      .catch(err => {
+        console.log("Error fetching and parsing data", err);
+    });
+  }
 
   // Handle message change
   messageChange = e => {
@@ -169,7 +196,6 @@ class MessagesPage extends Component {
     this.setState({ conversationId: e.target.id });
     axios.get(`/conversation/${this.state.conversationId}`, { headers: { Authorization: `Bearer ${this.state.token}` }} )
       .then(res => {
-        console.log(res.data);
         res.data.map(item => this.setState({ messages: [...this.state.messages, item.body] }))
       })
       .catch(err => {
@@ -201,7 +227,7 @@ class MessagesPage extends Component {
     const message = this.state.messages.map((message, i) => 
       <p key={i}><span className={classes.sentMessageLength}>{message}</span></p>
     );
-
+    
     return (
       <div>
         <NavigationBar></NavigationBar>
@@ -229,10 +255,23 @@ class MessagesPage extends Component {
                 >
                   <Fade in={this.state.open}>
                     <div className={classes.paper}>
-                      <h2 id="transition-modal-title">Dog Sitters</h2>
-                      <p id="transition-modal-description">
-                        react-transition-group animates me.
-                      </p>
+
+                      {this.state.profiles.map(profile => (
+                        <Card className={classes.card}>
+                          <Grid container wrap="nowrap" spacing={2}>
+                            <Grid item>
+                              <Avatar className={classes.image}>
+                                <img  className={classes.img} alt="Remy Sharp"  src={profile.photoUrl} />
+                              </Avatar>
+                            </Grid>
+                            <Grid item xs zeroMinWidth>
+                              <Typography noWrap variant='subtitle1'>{profile.firstName} {profile.lastName}</Typography>
+                            </Grid>
+                            <Divider />
+                          </Grid>
+                        </Card>
+                      ))}
+                     
                     </div>
                   </Fade>
                 </Modal>
