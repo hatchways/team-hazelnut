@@ -80,8 +80,10 @@ export default function NavigationBar() {
                       }}
                       open={open}
                       onClose={handleClose}
+                      
                     >
-                      <MenuItem><a href="./profile">Profile</a></MenuItem>
+                      {/* <MenuItem><a href="./profile">Profile</a></MenuItem> */}
+                      <MenuItem className="center" component={Link} to={"/profile"}>Profile</MenuItem>
                       <MenuItem onClick={handleClose}>My account</MenuItem>
                       <MenuItem onClick={handleLogout}>Log Out</MenuItem>
                 </Menu>
