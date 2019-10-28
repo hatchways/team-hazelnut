@@ -17,22 +17,6 @@ import conversationRouter from "./routes/conversation";
 
 var app = express();
 
-// socket.io
-var socket_io = require( "socket.io" );
-var io = socket_io();
-app.io = io;
-
-// When a client connects, show message in the console
-io.on('connection', function (socket) {
-  console.log('A client is connected!');
-  socket.on("message", msg => {
-    io.emit("message", msg);
-    //broadcast message to everyone in port:3000 except yourself.
-    socket.broadcast.emit("received", { message: msg  });
-  });
-});
-
-
 app.use(logger("dev"));
 app.use(json());
 app.use(urlencoded({ extended: false }));

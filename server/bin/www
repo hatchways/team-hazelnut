@@ -27,7 +27,8 @@ var server = http.createServer(app);
  * Socket.io
  */
 
-var io = app.io
+var socketApi = require('../socketApi');
+var io = socketApi.io;
 io.attach(server);
 
 /**

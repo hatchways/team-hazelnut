@@ -22,7 +22,7 @@ module.exports.createConversation = function(req, res, next) {
 module.exports.getConversations = function(req, res, next) {
     var arr = [];
     Conversation.find({ senderId: req.user })
-        .populate("recipientId")
+        // .populate("recipientId")
         .exec(function(err, conversations){
             if (err) return next(err);
             conversations.map(item => {
