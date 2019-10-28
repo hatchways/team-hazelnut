@@ -19,23 +19,21 @@ module.exports.createConversation = function(req, res, next) {
     }
 };
 
+// GET list of conversations and recipient profile
 module.exports.getConversations = function(req, res, next) {
-    var arr = [];
-    Conversation.find({ senderId: req.user })
-        // .populate("recipientId")
-        .exec(function(err, conversations){
-            if (err) return next(err);
-            conversations.map(item => {
-                Profile.find({ userId: item["recipientId"]["_id"] }, function(err, profile) {
-                    if (err) return next(err);
-                    const inside = [];
-                    inside.push(item);
-                    inside.push(profile[0]);
-                    arr.push(inside);
-                });
-            });
-            res.json(conversations);
-        });
+    Conversation.aggregate([
+        {
+            $lookup: {
+                from: "profiles",
+                localField: "recipientId",
+                foreignField: "userId",
+                as: "recipient_info"
+            }
+        }
+    ], function(err, conversations) {
+        if (err) return next(err);
+        res.json(conversations);
+    });
 };
 
 

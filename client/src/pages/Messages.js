@@ -285,9 +285,10 @@ class MessagesPage extends Component {
                       >
                         <Avatar
                           alt="Remy Sharp"
+                          src={item.recipient_info[0].photoUrl}
                         />
                         <Typography variant="subtitle1" >
-                          {item.recipientId.name}
+                          {item.recipient_info[0].firstName} {item.recipient_info[0].lastName}
                         </Typography>
                         <Divider />
                       </ListItem> 
