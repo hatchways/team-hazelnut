@@ -161,7 +161,7 @@ class PhotoPage extends Component {
                           </Button>
                         </label>
                       </Grid>
-                      <Grid xs={4}></Grid>
+                      <Grid item xs={4}></Grid>
                       <Grid item xs={4} className="center">
                         <Button
                           fullWidth
