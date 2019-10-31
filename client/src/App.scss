@@ -11,8 +11,7 @@
 
 .App_aside {
   width: 50%;
-  display: flex;
-  justify-content: center;
+  @extend %screen-centering;
 }
 
 .App_form {
