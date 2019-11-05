@@ -34,7 +34,7 @@ app.use(json());
 app.use(urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(cors());
-app.use(express.static(join(__dirname, "public")));
+app.use(express.static(join(__dirname, "client", "build")));
 
 app.use(passport.initialize());
 require("./libs/passport")(passport);
