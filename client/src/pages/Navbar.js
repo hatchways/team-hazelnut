@@ -92,11 +92,12 @@ class NavigationBar extends Component {
             Messages
           </Button>
           <IconButton aria-label="avatar" onClick={this.handleClick}>
+            {/* There is an issue with loading the photo, need to fix
             <Avatar
               alt="Remy Sharp"
               src={profile.photoUrl}
               className={classes.bigAvatar}
-            />
+            />*/}
           </IconButton>
           <Menu
             id="menu-appbar"
