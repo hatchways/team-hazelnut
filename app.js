@@ -17,6 +17,7 @@ import paymentRouter from "./routes/payment";
 import conversationRouter from "./routes/conversation";
 
 var app = express();
+const path = require("path")
 
 app.use(logger("dev"));
 app.use(json());
