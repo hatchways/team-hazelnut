@@ -115,9 +115,9 @@ class ProfileDetails extends Component {
     const field = event.target.name;
     let request = { ...this.state.request };
     request[field] = event.target.value;
-    this.state.request.firstName = this.state.profile.firstName;
-    this.state.request.lastName = this.state.profile.lastName;
-    this.state.request.rate = this.state.profile.rate;
+    this.setState({request: {firstName : this.state.profile.firstName}});
+    this.setState({request: {lastName : this.state.profile.lastName}});
+    this.setState({request: {rate: this.state.profile.rate}});
     this.setState({ request });
   };
 
