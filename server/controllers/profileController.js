@@ -54,9 +54,13 @@ module.exports.updateProfile = function(req, res, next) {
 module.exports.getProfile = async function(req, res, next) {
   if (mongoose.Types.ObjectId.isValid(req.params.id)) {
     Profile.findOne({ userId: req.params.id }, (err, profile) => {
-      if (err) {
-        res.status(404).json({ error: "Profile not found" });
-      } else {
+      if (!profile) {
+        res.status(404).json({ error: err });
+      } 
+      else if(err){
+        res.status(500).json({ error: err });
+      }
+      else {
         res.status(200).json({ profile });
       }
     });
