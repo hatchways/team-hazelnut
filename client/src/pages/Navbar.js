@@ -94,7 +94,7 @@ class NavigationBar extends Component {
           <IconButton aria-label="avatar" onClick={this.handleClick}>
             <Avatar
               alt="Remy Sharp"
-              src={(profile) ? profile.photoUrl : require("../images/07cc6abd390ab904abbf31db5e6ea20357f8b127.png")}
+              src={profile ? profile.photoUrl : require("../images/07cc6abd390ab904abbf31db5e6ea20357f8b127.png")}
               className={classes.bigAvatar}
             />
           </IconButton>
