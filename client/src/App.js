@@ -31,9 +31,6 @@ function App() {
         <Route exact path="/" component={LandingPage} />
         <Route path="/login" component={LoginPage} />
         <Route path="/signup" component={SignUpPage} />
-        <Route path="/profile-payment" component={ProfilePayment} />
-        <Route path="/profile-photo" component={PhotoPage} />
-        <Route path="/my-jobs" component={MyJobsPage} />
       </BrowserRouter>
     </MuiThemeProvider>
   );

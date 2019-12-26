@@ -17,13 +17,14 @@ import paymentRouter from "./routes/payment";
 import conversationRouter from "./routes/conversation";
 
 var app = express();
+const path = require("path")
 
 app.use(logger("dev"));
 app.use(json());
 app.use(urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(cors());
-app.use(express.static(join(__dirname, "public")));
+app.use(express.static(path.join(__dirname, "client", "build")));
 
 app.use(passport.initialize());
 require("./libs/passport")(passport);
@@ -56,4 +57,5 @@ app.use(function(err, req, res, next) {
   res.json({ error: err });
 });
 
+app.listen();
 module.exports = app;
