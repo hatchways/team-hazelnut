@@ -1,4 +1,3 @@
-//Needs to create the profile models later
 import Profile from "../models/Profile";
 import mongoose from "mongoose";
 
@@ -15,7 +14,7 @@ module.exports.createProfile = function(req, res, next) {
     return res.status(400).json(errors);
   }
 
-  // creating a profile
+  // Creating a profile
   const user = req.body;
   user.userId = req.user;
   const profile = new Profile(user);

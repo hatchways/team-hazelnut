@@ -62,7 +62,6 @@ class LoginPage extends Component {
           const decoded = jwt_decode(token);
           localStorage.setItem("jwtToken", token);
           localStorage.setItem("userId", decoded.id);
-          console.log("successfully logged in ");
           this.props.history.push("/profile");
         })
         .catch(err => {
