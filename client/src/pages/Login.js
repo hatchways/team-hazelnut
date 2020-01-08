@@ -27,6 +27,10 @@ class LoginPage extends Component {
     this.setState({ password: event.target.value });
   };
 
+  handleEnterButton = event => {
+    if (event.keyCode == 13){document.getElementById('loginButton').click()}
+  }
+
   validate = () => {
     let emailError = "";
     var re = /[^@]+@[^.]+..+/;
@@ -109,6 +113,7 @@ class LoginPage extends Component {
                         type="email"
                         value={this.state.email}
                         onChange={this.handleEmailChange}
+                        onKeyDown={this.handleEnterButton}
                         fullWidth
                       />
                       <div style={{ color: "red" }}>
@@ -128,12 +133,14 @@ class LoginPage extends Component {
                         type="password"
                         value={this.state.password}
                         onChange={this.handlePasswordChange}
+                        onKeyDown={this.handleEnterButton}
                         fullWidth
                       />
                     </Grid>
                     <Grid item xs={2}></Grid>
                     <Grid item xs={8} className="center">
                       <Button
+                        id="loginButton"
                         variant="contained"
                         onClick={this.handleSubmit}
                         fullWidth
