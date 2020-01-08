@@ -59,17 +59,20 @@ class NavigationBar extends Component {
   };
 
   componentDidMount() {
-    axios.get(`/profile/get/${this.state.userId}`, { headers: { Authorization: `Bearer ${this.state.token}` } })
-    .then(res => {
-        this.setState({
+    if (this.state.userId !== null) {
+      axios.get(`/profile/get/${this.state.userId}`, { headers: { Authorization: `Bearer ${this.state.token}` } })
+        .then(res => {
+          this.setState({
             profile: res.data.profile
+          });
+        })
+        .catch(err => {
+          console.log("Error fetching and parsing data", err);
         });
-    })
-    .catch(err => {
-        console.log("Error fetching and parsing data", err);
-    });
+    }
+
   }
-  
+
   render() {
     const { classes } = this.props;
     const { anchorEl } = this.state;
@@ -158,18 +161,18 @@ class NavigationBar extends Component {
 
     return (
       <div className={classes.root}>
-      <AppBar className={this.state.token ? classes.loggedInNavbar : classes.logInNavbar}>
-        <Toolbar>
-          <Typography variant="h6" className={classes.title}>
-            <img
-              src={require("../images/loving-sitter-logo.png")}
-              alt="logo of app"
-            />
-          </Typography>
-          {buttons}
-        </Toolbar>
-      </AppBar>
-    </div>
+        <AppBar className={this.state.token ? classes.loggedInNavbar : classes.logInNavbar}>
+          <Toolbar>
+            <Typography variant="h6" className={classes.title}>
+              <img
+                src={require("../images/loving-sitter-logo.png")}
+                alt="logo of app"
+              />
+            </Typography>
+            {buttons}
+          </Toolbar>
+        </AppBar>
+      </div>
     );
   };
 }
