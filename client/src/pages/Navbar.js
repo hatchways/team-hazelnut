@@ -116,6 +116,9 @@ class NavigationBar extends Component {
             open={open}
             onClose={this.handleClose}
           >
+            {profile ?<MenuItem component={Link} to={"/profile"}>{profile.firstName} {profile.lastName}</MenuItem>
+            
+            : null}
             <MenuItem component={Link} to={"/profile"}>
               Profile
             </MenuItem>
