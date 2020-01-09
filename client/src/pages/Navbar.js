@@ -8,6 +8,7 @@ import IconButton from "@material-ui/core/IconButton";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
 import Avatar from "@material-ui/core/Avatar";
+import Box from "@material-ui/core/Box";
 import { Link } from "react-router-dom";
 import axios from "axios";
 
@@ -32,6 +33,13 @@ const styles = theme => ({
     backgroundColor: "transparent",
     boxShadow: "none",
     position: "static"
+  },
+  dropDownName: {
+    display:"flex",
+    justifyContent: "center",
+    fontWeight: "bold",
+    marginTop: 10,
+    marginBottom: 20,
   }
 });
 
@@ -116,6 +124,9 @@ class NavigationBar extends Component {
             open={open}
             onClose={this.handleClose}
           >
+            {profile.firstName ?
+            <div><Box className={classes.dropDownName}>{profile.firstName} {profile.lastName}</Box><hr></hr></div>
+            : null}
             <MenuItem component={Link} to={"/profile"}>
               Profile
             </MenuItem>

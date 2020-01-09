@@ -28,7 +28,7 @@ class LoginPage extends Component {
   };
 
   handleEnterButton = event => {
-    if (event.keyCode == 13){document.getElementById('loginButton').click()}
+    if (event.keyCode === 13){document.getElementById('loginButton').click()}
   }
 
   validate = () => {
