@@ -1,16 +1,14 @@
-import React, { Component } from "react";
+import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import MenuItem from "@material-ui/core/MenuItem";
-import TextField from "@material-ui/core/TextField";
 import NavigationBar from "./Navbar";
+import React, { Component } from "react";
+import SideNavigationBar from "./SideNavBar";
+import TextField from "@material-ui/core/TextField";
 import axios from "axios";
 import jwt_decode from "jwt-decode";
-
-import SideNavigationBar from "./SideNavBar";
-
-import Button from "@material-ui/core/Button";
-
 import { Snackbar, IconButton } from "@material-ui/core";
+import { makeStyles } from '@material-ui/core/styles';
 
 class EditProfilePage extends Component {
   state = {
@@ -50,18 +48,13 @@ class EditProfilePage extends Component {
   prefillProfile() {
     const token = localStorage.getItem("jwtToken");
     const id = jwt_decode(token).id;
+
     axios
-      .get(`profile/get/${id}`, {
-        headers: { Authorization: `Bearer ${token}` }
-      })
+      .get(`profile/get/${id}`, { headers: { Authorization: `Bearer ${token}` } })
       .then(res => {
-        if (res.data.profile) {
-          this.setState({ user: res.data.profile });
-        }
+        if (res.data.profile) { this.setState({ user: res.data.profile }); }
       })
-      .catch(err => {
-        console.log({ err });
-      });
+      .catch(err => { console.log({ err }); });
   }
 
   createProfile() {
@@ -216,6 +209,7 @@ class EditProfilePage extends Component {
 
   render() {
     console.log(this.state);
+    const { classes } = this.props
     return (
       <div>
         <Snackbar
@@ -395,15 +389,15 @@ class EditProfilePage extends Component {
                           </Grid>
                           <Grid item xs={9}>
                             <TextField
-                              name="email"
-                              placeholder="john-doe.s@gmail.com"
-                              id="standard-email"
-                              value={this.state.user.email}
-                              onChange={this.handleInputChange}
-                              margin="normal"
-                              variant="outlined"
                               disabled={this.state.disabled}
                               fullWidth
+                              id="standard-email"
+                              margin="normal"
+                              name="email"
+                              onChange={this.handleInputChange}
+                              placeholder="john-doe.s@gmail.com"
+                              value={this.state.user.email}
+                              variant="outlined"
                             />
                           </Grid>
                         </Grid>

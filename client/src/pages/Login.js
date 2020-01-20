@@ -35,9 +35,7 @@ class LoginPage extends Component {
     let emailError = "";
     var re = /[^@]+@[^.]+..+/;
     var test = re.test(this.state.email);
-    if (!test === true) {
-      emailError = "Invalid email";
-    }
+    if (!test === true) { emailError = "Invalid email"; }
 
     if (emailError) {
       this.setState({ emailError });
