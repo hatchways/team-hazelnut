@@ -1,4 +1,3 @@
-import Box from "@material-ui/core/Box"
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -9,7 +8,43 @@ import TextField from "@material-ui/core/TextField";
 import Typography from '@material-ui/core/Typography';
 import axios from "axios";
 import jwt_decode from "jwt-decode";
-import { Snackbar, IconButton } from "@material-ui/core";
+import { Snackbar, IconButton, Divider } from "@material-ui/core";
+
+function DataDisplay(props) {
+  return (
+    <Grid item container>
+      <Grid item sm={2} xs={12}>
+        <Typography variant="subtitle1" className="center">{props.title}</Typography>
+      </Grid>
+      <Grid item sm={8} xs={12}>
+        <Typography variant="h6" component={props.component} className="center font-medium">{props.label}</Typography>
+      </Grid>
+    </Grid>
+  )
+}
+
+function EditBox(props) {
+  return (
+    <Grid item>
+      <TextField
+        disabled={props.disabled}
+        id={props.id}
+        label={props.label}
+        name={props.name}
+        onChange={props.onChange}
+        placeholder={props.placeholder}
+        value={props.value}
+        variant="outlined"
+      />
+    </Grid>
+  )
+}
+
+function HLine(){
+  return (
+    <Grid item xs={12}><Divider></Divider></Grid>
+  )
+}
 
 class EditProfilePage extends Component {
   state = {
@@ -202,12 +237,14 @@ class EditProfilePage extends Component {
   };
 
   enableEdit = event => {
-    this.setState({ disabled: false, edit: "1" });
+    this.setState({ disabled: false, hideEdit: "" });
   };
 
   cancelEdit = event => {
-    this.setState({ disabled: true, edit: "0" });
+    this.setState({ disabled: true, hideEdit: "none" });
   };
+
+
 
   render() {
     console.log(this.state);
@@ -244,222 +281,167 @@ class EditProfilePage extends Component {
                 method="POST"
                 onSubmit={this.handleSubmit}
               >
-                <Grid container direction="row" justify="center" spacing={3}>
-                  <Grid item xs={12}>
-                    <Typography align="center" variant="h3" component="h4">Edit Profile</Typography>
-                  </Grid>
+                <Grid container justify="center" spacing={3} className="p-1">
 
-                  <Box className="hideEditFields" display={this.state.hideEdit}></Box>{/*Does nothing right now */}
                   <Grid item>
                     {this.state.errors ? (
                       <div style={{ color: "red" }}>
                         <p>{this.state.errors.firstName}</p>
-                      </div>
-                    ) : null}
-                  </Grid>
-                  <Grid item>
-                    <TextField
-                      name="firstName"
-                      id="standard-firstName"
-                      placeholder="John"
-                      label="First Name"
-                      value={this.state.user.firstName}
-                      onChange={this.handleInputChange}
-                      margin="normal"
-                      variant="outlined"
-                      disabled={this.state.disabled}
-                    />
-                  </Grid>
-
-                  {/* Last name */}
-
-                  <Grid item>
-                    {this.state.errors ? (
-                      <div style={{ color: "red" }}>
                         <p>{this.state.errors.lastName}</p>
+                        <p>{this.state.errors.gender}</p>
+                        <p>{this.state.errors.birthDate}</p>
+                        <p>{this.state.errors.email}</p>
+                        <p>{this.state.errors.phone}</p>
+                        <p>{this.state.errors.address}</p>
+                        <p>{this.state.errors.description}</p>
+                        <p>{this.state.errors.rate}</p>
                       </div>
                     ) : null}
                   </Grid>
+
+                  {!this.state.disabled ?
+                    <Grid container direction="row" justify="center" spacing={3}>
+
+                      {/* First name */}
+                      <EditBox
+                        disabled={this.state.disabled}
+                        id="standard-firstName"
+                        label="First Name"
+                        name="firstName"
+                        onChange={this.handleInputChange}
+                        placeholder="John"
+                        value={this.state.user.firstName}
+                        variant="outlined"
+                      ></EditBox>
+
+                      {/* Last name */}
+                      <EditBox
+                        disabled={this.state.disabled}
+                        id="standard-lastName"
+                        label="Last Name"
+                        name="lastName"
+                        onChange={this.handleInputChange}
+                        placeholder="Doe"
+                        value={this.state.user.lastName}
+                        variant="outlined"
+                      ></EditBox>
+
+                      {/* Gender */}
+                      <Grid item>
+                        <TextField
+                          disabled={this.state.disabled}
+                          id="standard-gender"
+                          label="Gender"
+                          name="gender"
+                          onChange={this.handleInputChange}
+                          select
+                          value={this.state.user.gender}
+                          variant="outlined"
+                        >
+                          <MenuItem value="">
+                            <em>Gender</em>
+                          </MenuItem>
+                          <MenuItem value={"male"}>Male</MenuItem>
+                          <MenuItem value={"female"}>Female</MenuItem>
+                        </TextField>
+                      </Grid>
+
+                      {/* DOB */}
+                      <EditBox
+                        disabled={this.state.disabled}
+                        id="standard-birthDate"
+                        label="Birth Date"
+                        name="birthDate"
+                        onChange={this.handleInputChange}
+                        type="date"
+                        value={this.state.user.birthDate}
+                        variant="outlined"
+                      ></EditBox>
+
+                      {/* Email */}
+                      <EditBox
+                        disabled={this.state.disabled}
+                        id="standard-email"
+                        label="Email Address"
+                        name="email"
+                        onChange={this.handleInputChange}
+                        placeholder="john-doe.s@gmail.com"
+                        value={this.state.user.email}
+                        variant="outlined"
+                      ></EditBox>
+
+                      {/* Phone number */}
+                      <EditBox
+                        disabled={this.state.disabled}
+                        id="standard-phone"
+                        label="Phone Number"
+                        name="phone"
+                        onChange={this.handleInputChange}
+                        value={this.state.user.phone}
+                        variant="outlined"
+                      ></EditBox>
+
+                      {/* Address */}
+                      <EditBox
+                        disabled={this.state.disabled}
+                        id="standard-address"
+                        label="Address"
+                        name="address"
+                        onChange={this.handleInputChange}
+                        placeholder="Address"
+                        value={this.state.user.address}
+                        variant="outlined"
+                      ></EditBox>
+
+                      {/* Description */}
+                      <EditBox
+                        disabled={this.state.disabled}
+                        id="standard-description"
+                        label="Describe Yourself"
+                        name="description"
+                        onChange={this.handleInputChange}
+                        placeholder="About you"
+                        value={this.state.user.description}
+                        variant="outlined"
+                      ></EditBox>
+
+                      {/*Hourly Rate*/}
+                      <EditBox
+                        disabled={this.state.disabled}
+                        id="standard-rate"
+                        label="Hourly Rate"
+                        name="rate"
+                        onChange={this.handleInputChange}
+                        placeholder="Your hourly rate"
+                        type="number"
+                        value={this.state.user.rate}
+                        variant="outlined"
+                      ></EditBox>
+                    </Grid>
+                    :
+                    <Grid container direction="row" justify="center" spacing={3}>
+                      <Grid item xs={12}>
+                        <Typography variant="h3" className="center">{this.state.user.firstName} {this.state.user.lastName}</Typography>
+                      </Grid>
+                      <DataDisplay title="Gender" label={this.state.user.gender}></DataDisplay>
+                      <HLine></HLine>
+                      <DataDisplay title="Birthday" label={this.state.user.birthDate}></DataDisplay>
+                      <HLine></HLine>
+                      <DataDisplay title="Email" label={this.state.user.email}></DataDisplay>
+                      <HLine></HLine>
+                      <DataDisplay title="Phone" label={this.state.user.phone}></DataDisplay>
+                      <HLine></HLine>
+                      <DataDisplay title="Address" label={this.state.user.address}></DataDisplay>
+                      <HLine></HLine>
+                      <DataDisplay title="Description" label={this.state.user.description}></DataDisplay>
+                      <HLine></HLine>
+                      <DataDisplay title="Rate" label={"$" + this.state.user.rate + " an hour"}></DataDisplay>
+                      <HLine></HLine>
+                    </Grid>
+
+                  }{/*Add display of profile */}
+
                   <Grid item>
-                    <TextField
-                      name="lastName"
-                      id="standard-lastName"
-                      placeholder="Doe"
-                      label="Last Name"
-                      value={this.state.user.lastName}
-                      onChange={this.handleInputChange}
-                      margin="normal"
-                      variant="outlined"
-                      disabled={this.state.disabled}
-                    />
-                  </Grid>
-
-                  {/* Gender */}
-
-                  <Grid item className="text-right">
-                    {this.state.errors ? (
-                      <div style={{ color: "red" }}>
-                        {this.state.errors.gender}
-                      </div>
-                    ) : null}
-                  </Grid>
-                  <Grid item>
-                    <TextField
-                      select
-                      name="gender"
-                      id="standard-gender"
-                      label="Gender"
-                      value={this.state.user.gender}
-                      onChange={this.handleInputChange}
-                      margin="normal"
-                      variant="outlined"
-                      disabled={this.state.disabled}
-                    >
-                      <MenuItem value="">
-                        <em>Gender</em>
-                      </MenuItem>
-                      <MenuItem value={"male"}>Male</MenuItem>
-                      <MenuItem value={"female"}>Female</MenuItem>
-                    </TextField>
-                  </Grid>
-
-                  {/* DOB */}
-                  <Grid item className="text-right">
-                    {this.state.errors ? (
-                      <div style={{ color: "red" }}>
-                        {this.state.errors.birthDate}
-                      </div>
-                    ) : null}
-                  </Grid>
-                  <Grid item>
-                    <TextField
-                      type="date"
-                      name="birthDate"
-                      id="standard-birthDate"
-                      label="Birth Date"
-                      value={this.state.user.birthDate}
-                      onChange={this.handleInputChange}
-                      margin="normal"
-                      variant="outlined"
-                      disabled={this.state.disabled}
-                    />
-                  </Grid>
-
-                  {/* Email */}
-
-                  <Grid item className="text-right">
-                    {this.state.errors ? (
-                      <div style={{ color: "red" }}>
-                        {this.state.errors.email}
-                      </div>
-                    ) : null}
-                  </Grid>
-                  <Grid item>
-                    <TextField
-                      disabled={this.state.disabled}
-                      id="standard-email"
-                      margin="normal"
-                      name="email"
-                      label="Email Address"
-                      onChange={this.handleInputChange}
-                      placeholder="john-doe.s@gmail.com"
-                      value={this.state.user.email}
-                      variant="outlined"
-                    />
-                  </Grid>
-
-                  {/* Phone number */}
-
-                  <Grid item className="text-right">
-                    {this.state.errors ? (
-                      <div style={{ color: "red" }}>
-                        {this.state.errors.phone}
-                      </div>
-                    ) : null}
-                  </Grid>
-                  <Grid item>
-                    <TextField
-                      name="phone"
-                      id="standard-phone"
-                      label="Phone Number"
-                      value={this.state.user.phone}
-                      onChange={this.handleInputChange}
-                      margin="normal"
-                      variant="outlined"
-                      disabled={this.state.disabled}
-                    />
-                  </Grid>
-
-                  {/* Address */}
-
-                  <Grid item className="text-right">
-                    {this.state.errors ? (
-                      <div style={{ color: "red" }}>
-                        {this.state.errors.address}
-                      </div>
-                    ) : null}
-                  </Grid>
-                  <Grid item>
-                    <TextField
-                      name="address"
-                      placeholder="Address"
-                      id="standard-address"
-                      label="Address"
-                      value={this.state.user.address}
-                      onChange={this.handleInputChange}
-                      margin="normal"
-                      variant="outlined"
-                      disabled={this.state.disabled}
-                    />
-                  </Grid>
-
-                  {/* Description */}
-                  <Grid item>
-                    {this.state.errors ? (
-                      <div style={{ color: "red" }}>
-                        {this.state.errors.description}
-                      </div>
-                    ) : null}
-                  </Grid>
-                  <Grid>
-                    <TextField
-                      name="description"
-                      placeholder="About you"
-                      id="standard-description"
-                      label="Describe Yourself"
-                      value={this.state.user.description}
-                      onChange={this.handleInputChange}
-                      margin="normal"
-                      variant="outlined"
-                      disabled={this.state.disabled}
-                    />
-                  </Grid>
-
-                  {/*Hourly Rate*/}
-                  <Grid item className="text-right">
-                    {this.state.errors ? (
-                      <div style={{ color: "red" }}>
-                        {this.state.errors.rate}
-                      </div>
-                    ) : null}
-                  </Grid>
-                  <Grid item>
-                    <TextField
-                      name="rate"
-                      placeholder="Your hourly rate"
-                      id="standard-rate"
-                      label="Hourly Rate"
-                      type="number"
-                      value={this.state.user.rate}
-                      onChange={this.handleInputChange}
-                      margin="normal"
-                      variant="outlined"
-                      disabled={this.state.disabled}
-                    />
-                  </Grid>
-
-
-                  <Grid item className="center">
                     <Button
                       size="large"
                       variant="contained"
@@ -483,7 +465,7 @@ class EditProfilePage extends Component {
                   </Grid>
 
                   {!this.state.disabled ? (
-                    <Grid item xs={4}>
+                    <Grid item>
                       <Button
                         variant="outlined"
                         color="secondary"
@@ -494,7 +476,7 @@ class EditProfilePage extends Component {
                           </Button>
                     </Grid>
                   ) : (
-                      <Grid item xs={2}></Grid>
+                      <Grid item></Grid>
                     )}
 
                 </Grid>
