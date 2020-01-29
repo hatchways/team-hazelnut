@@ -5,6 +5,10 @@ import requestsController from "../controllers/requestsController";
 import authenticate from "../routes/utils/auth";
 var router = express.Router();
 
+User.create({ name: "Test", email: "tester@yahoo.com", password: "HatchTest123", confirmPassword: "HatchTest123" }, function (err){
+  if (err) return err;
+})
+
 router.post("/register", async function(req, res, next) {
   const name = req.body.name;
   const email = req.body.email;
