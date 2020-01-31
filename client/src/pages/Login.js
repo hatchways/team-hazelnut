@@ -7,6 +7,7 @@ import "../App.scss";
 import Button from "@material-ui/core/Button";
 
 import { withRouter } from "react-router-dom";
+import { EditBox } from "./reusable/components";
 
 const initalState = {
   email: "",
@@ -28,7 +29,7 @@ class LoginPage extends Component {
   };
 
   handleEnterButton = event => {
-    if (event.keyCode === 13){document.getElementById('loginButton').click()}
+    if (event.keyCode === 13) { document.getElementById('loginButton').click() }
   }
 
   validate = () => {
@@ -74,92 +75,105 @@ class LoginPage extends Component {
     }
   };
 
+  demoTest = event => {
+    event.preventDefault();
+    const data = {
+      email: "tester@yahoo.com",
+      password: "HatchTest123",
+    };
+    axios
+      .post("/users/login", data)
+      .then(res => {
+        const { token } = res.data;
+        const decoded = jwt_decode(token);
+        localStorage.setItem("jwtToken", token);
+        localStorage.setItem("userId", decoded.id);
+        this.props.history.push("/profile");
+      })
+      .catch(err => {
+        this.setState({
+          errors: err.response.data.error
+        });
+      });
+  }
+
+
   render() {
     return (
       <div>
-        <Grid container spacing={3}>
-          <Grid item xs={2}></Grid>
-          <Grid item xs={8}>
-            <div className="container">
-              <div className="infoBox ">
-                <form onSubmit={this.handleSubmit}>
-                  <Grid container spacing={3}>
-                    <Grid item xs={12}>
-                      <h1 className="center">LogIn</h1>
-                    </Grid>
-                    {this.state.errors ? (
-                      <Grid
-                        item
-                        xs={12}
-                        className="pb-0 pt-0"
-                        style={{ color: "red" }}
-                      >
-                        <p className="mb-0 mt-0">{this.state.errors}</p>
-                      </Grid>
-                    ) : null}
-                    <Grid item xs={12} className="pb-0 pt-0">
-                      <p className="mb-0 mt-0">EMAIL ADDRESS</p>
-                    </Grid>
-                    <Grid item xs={12}>
-                      <TextField
-                        name="email"
-                        id="outlined-email"
-                        placeholder="Email"
-                        margin="normal"
-                        variant="outlined"
-                        type="email"
-                        value={this.state.email}
-                        onChange={this.handleEmailChange}
-                        onKeyDown={this.handleEnterButton}
-                        fullWidth
-                      />
-                      <div style={{ color: "red" }}>
-                        {this.state.emailError}
-                      </div>
-                    </Grid>
-                    <Grid item xs={12} className="pb-0 pt-0">
-                      <p className="mb-0 mt-0">PASSWORD</p>
-                    </Grid>
-                    <Grid item xs={12}>
-                      <TextField
-                        name="password"
-                        id="outlined-password"
-                        placeholder="Password"
-                        margin="normal"
-                        variant="outlined"
-                        type="password"
-                        value={this.state.password}
-                        onChange={this.handlePasswordChange}
-                        onKeyDown={this.handleEnterButton}
-                        fullWidth
-                      />
-                    </Grid>
-                    <Grid item xs={2}></Grid>
-                    <Grid item xs={8} className="center">
-                      <Button
-                        id="loginButton"
-                        variant="contained"
-                        onClick={this.handleSubmit}
-                        fullWidth
-                        className="submit-button"
-                        size="large"
-                      >
-                        Login
-                      </Button>
-                    </Grid>
-                    <Grid item xs={2}></Grid>
 
-                    <Grid item xs={12} className="center">
-                      <p>
-                        Don't have an Account? <a href="../signup">Register</a>
-                      </p>
-                    </Grid>
-                  </Grid>
-                </form>
-              </div>
-            </div>
+        <Grid item xs={2}>
+          <Button
+            id="demoButton"
+            variant="contained"
+            onClick={this.demoTest}
+            fullWidth
+            className="submit-button"
+            size="large"
+          >
+            Demo
+          </Button>
+        </Grid>
+        <Grid container spacing={3} justify="center">
+          <Grid item xs={3}>
+            <form onSubmit={this.handleSubmit}>
+              <Grid container spacing={3}>
+                <Grid item xs={12}>
+                  <h1 className="center">Log In</h1>
+                </Grid>
+                <Grid item>
+                  <div style={{ color: "red" }}>
+                    {this.state.emailError}
+                  </div>
+                  <div style={{ color: "red" }}>
+                    {this.state.passwordError}
+                  </div>
+                </Grid>
+                <EditBox
+                  fullWidth
+                  id="outlined-email"
+                  name="email"
+                  onChange={this.handleEmailChange}
+                  onKeyDown={this.handleEnterButton}
+                  label="Email"
+                  placeholder="Email"
+                  type="email"
+                  value={this.state.email}
+                  xs={12}
+                />
+                <EditBox
+                  name="password"
+                  id="outlined-password"
+                  placeholder="Password"
+                  label="Password"
+                  type="password"
+                  value={this.state.password}
+                  onChange={this.handlePasswordChange}
+                  onKeyDown={this.handleEnterButton}
+                  fullWidth
+                  xs={12}
+                />
+                <Grid item xs={12}>
+                  <Button
+                    id="loginButton"
+                    variant="contained"
+                    onClick={this.handleSubmit}
+                    fullWidth
+                    className="submit-button"
+                    size="large"
+                  >
+                    Login
+                      </Button>
+                </Grid>
+
+                <Grid item xs={12} className="center">
+                  <p>
+                    Don't have an Account? <a href="../signup">Register</a>
+                  </p>
+                </Grid>
+              </Grid>
+            </form>
           </Grid>
-          <Grid item xs={2}></Grid>
         </Grid>
       </div>
     );

@@ -5,8 +5,8 @@ import TextField from "@material-ui/core/TextField";
 import Grid from "@material-ui/core/Grid";
 import "../App.scss";
 import Button from "@material-ui/core/Button";
-
-import { Snackbar, IconButton } from "@material-ui/core";
+import { EditBox } from './reusable/components';
+import { Snackbar, IconButton, Typography } from "@material-ui/core";
 
 export const snackbarmsg = "wow";
 
@@ -50,7 +50,7 @@ class SignUpPage extends Component {
     if (!test === true) {
       emailError = "Invalid email";
     }
-    
+
     if (emailError) {
       this.setState({ emailError });
       return false;
@@ -79,14 +79,14 @@ class SignUpPage extends Component {
     this.setState({ emailError: undefined });
     return true;
   };
-  
+
   nameValidate = () => {
     let nameError = "";
-    
+
     if (this.state.name.length < 1) {
       nameError = "Please enter your name";
     }
-    
+
     if (nameError) {
       this.setState({ nameError });
       return false;
@@ -97,11 +97,11 @@ class SignUpPage extends Component {
 
   passwordValidate = () => {
     let passwordError = "";
-    
+
     if (this.state.password.length < 6) {
       passwordError = "Password is too short";
     }
-    
+
     if (passwordError) {
       this.setState({ passwordError });
       this.setState({
@@ -134,18 +134,18 @@ class SignUpPage extends Component {
       }
 
       axios.post('/users/register', newUser)
-      .then(res => {
+        .then(res => {
           const { token } = res.data;
           const decoded = jwt_decode(token);
           localStorage.setItem('jwtToken', token);
           localStorage.setItem("userId", decoded.id);
           this.props.history.push('/');
-      })
-      .catch(err => {
+        })
+        .catch(err => {
           this.setState({
             errors: err.response.data.error  // Error messages from backend
           });
-      });
+        });
     }
   };
 
@@ -158,7 +158,7 @@ class SignUpPage extends Component {
   };
 
   handleEnterButton = event => {
-    if (event.keyCode === 13){document.getElementById('signup-button').click()}
+    if (event.keyCode === 13) { document.getElementById('signup-button').click() }
   }
 
   render() {
@@ -182,126 +182,103 @@ class SignUpPage extends Component {
             ></IconButton>
           ]}
         />
-        <Grid container spacing={3}>
-          <Grid item xs={2}></Grid>
-          <Grid item xs={8}>
-            <div className="container">
-              <div className="infoBox ">
-                <form onSubmit={this.handleSubmit}>
-                  <Grid container spacing={3}>
-                    <Grid item xs={12}>
-                      <h1 className="center">Sign Up</h1>
-                    </Grid>
+        <Grid container spacing={3} justify="center" xs={12}>
+          <div className="infoBox ">
+            <form onSubmit={this.handleSubmit}>
+              <Grid container spacing={3} justify="center">
+                <Grid item xs={12} className="center">
+                  <h1>Sign Up</h1>
+                </Grid>
 
-                    {
-                      (this.state.errors)
-                      ? <Grid item xs={12} className="pb-0 pt-0" style={{ color: "red" }}>
-                          <p className="mb-0 mt-0">{this.state.errors}</p>
-                        </Grid>
-                      : null
-                    }
-
-                    <Grid item xs={12} className="pb-0 pt-0">
-                      <p className="mb-0 mt-0">NAME</p>
-                    </Grid>
-                    <Grid item xs={12}>
-                      <TextField
-                        name="name"
-                        id="outlined-name"
-                        placeholder="Name"
-                        margin="normal"
-                        variant="outlined"
-                        type="text"
-                        value={this.state.name}
-                        onChange={this.handleNameChange}
-                        fullWidth
-                      />
-                      <div style={{ color: "red" }}>{this.state.nameError}</div>
-                    </Grid>
-
-                    <Grid item xs={12} className="pb-0 pt-0">
-                      <p className="mb-0 mt-0">EMAIL ADDRESS</p>
-                    </Grid>
-                    <Grid item xs={12}>
-                      <TextField
-                        name="email"
-                        id="outlined-email"
-                        placeholder="Email"
-                        margin="normal"
-                        variant="outlined"
-                        type="email"
-                        value={this.state.email}
-                        onChange={this.handleEmailChange}
-                        fullWidth
-                      />
-                      <div style={{ color: "red" }}>
-                        {this.state.emailError}
-                      </div>
-                    </Grid>
-
-                    <Grid item xs={12} className="pb-0 pt-0">
-                      <p className="mb-0 mt-0">PASSWORD</p>
-                    </Grid>
-                    <Grid item xs={12}>
-                      <TextField
-                        name="password"
-                        id="outlined-password"
-                        placeholder="Password"
-                        margin="normal"
-                        variant="outlined"
-                        type="password"
-                        value={this.state.password}
-                        onChange={this.handlePasswordChange}
-                        fullWidth
-                      />
-                      <div style={{ color: "red" }}>
-                        {this.state.passwordError}
-                      </div>
-                    </Grid>
-
-                    <Grid item xs={12} className="pb-0 pt-0">
-                      <p className="mb-0 mt-0">CONFIRM PASSWORD</p>
-                    </Grid>
-                    <Grid item xs={12}>
-                      <TextField
-                        name="confirmPassword"
-                        id="outlined-password"
-                        placeholder="Confrim Password"
-                        margin="normal"
-                        variant="outlined"
-                        type="password"
-                        value={this.state.confirmPassword}
-                        onChange={this.handleConfirmPasswordChange}
-                        onKeyDown={this.handleEnterButton}
-                        fullWidth
-                      />
-                    </Grid>
-                    <Grid item xs={2}></Grid>
-                    <Grid item xs={8} className="center">
-                      <Button
-                        id="signup-button"
-                        variant="contained"
-                        onClick={this.handleSubmit}
-                        fullWidth
-                        className="submit-button"
-                        size="large"
-                      >
-                        Sign Up
-                      </Button>
-                    </Grid>
-                    <Grid item xs={2}></Grid>
-
-                    <Grid item xs={12} className="center">
-                      <p>
-                        Already have an Account? <a href="../login">Login</a>
-                      </p>
-                    </Grid>
+                <Grid container justify="center">
+                  <Grid item xs={12} className="center">
+                    <Typography color="error">
+                      {this.state.nameError}
+                    </Typography>
                   </Grid>
-                </form>
-              </div>
-            </div>
-          </Grid>
-          <Grid item xs={2}></Grid>
+                  <Grid item xs={12} className="center">
+                    <Typography color="error">
+                      {this.state.emailError}
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={12} className="center">
+                    <Typography color="error">
+                      {this.state.passwordError}
+                    </Typography>
+                  </Grid>
+                </Grid>
+
+                <EditBox
+                  className="center"
+                  xs={12}
+                  sm={7}
+                  fullWidth={true}
+                  id="outlined-name"
+                  label="Name"
+                  name="name"
+                  onChange={this.handleNameChange}
+                  type="text"
+                  value={this.state.name}
+                />
+
+                <EditBox
+                  xs={12}
+                  sm={7}
+                  fullWidth={true}
+                  id="outlined-email"
+                  label="Email"
+                  name="name"
+                  onChange={this.handleEmailChange}
+                  type="email"
+                  value={this.state.email}
+                />
+
+                <EditBox
+                  xs={12}
+                  sm={7}
+                  fullWidth={true}
+                  id="outlined-password"
+                  label="Password"
+                  name="password"
+                  onChange={this.handlePasswordChange}
+                  type="password"
+                  value={this.state.password}
+                />
+
+                <EditBox
+                  xs={12}
+                  sm={7}
+                  fullWidth={true}
+                  id="outlined-confirm-password"
+                  label="Confirm Password"
+                  name="confirmPassword"
+                  onChange={this.handleConfirmPasswordChange}
+                  type="password"
+                  value={this.state.confirmPassword}
+                  onKeyDown={this.handleEnterButton}
+                />
+
+                <Grid item xs={12} sm={7} className="center">
+                  <Button
+                    id="signup-button"
+                    variant="contained"
+                    onClick={this.handleSubmit}
+                    fullWidth
+                    className="submit-button"
+                    size="large"
+                  >
+                    Sign Up
+                      </Button>
+                </Grid>
+
+                <Grid item xs={12} className="center">
+                  <p>
+                    Already have an Account? <a href="../login">Login</a>
+                  </p>
+                </Grid>
+              </Grid>
+            </form>
+          </div>
         </Grid>
       </div>
     );

@@ -8,43 +8,14 @@ import TextField from "@material-ui/core/TextField";
 import Typography from '@material-ui/core/Typography';
 import axios from "axios";
 import jwt_decode from "jwt-decode";
-import { Snackbar, IconButton, Divider } from "@material-ui/core";
-
-function DataDisplay(props) {
-  return (
-    <Grid item container>
-      <Grid item sm={2} xs={12}>
-        <Typography variant="subtitle1" className="center">{props.title}</Typography>
-      </Grid>
-      <Grid item sm={8} xs={12}>
-        <Typography variant="h6" component={props.component} className="center font-medium">{props.label}</Typography>
-      </Grid>
-    </Grid>
-  )
-}
-
-function EditBox(props) {
-  return (
-    <Grid item>
-      <TextField
-        disabled={props.disabled}
-        id={props.id}
-        label={props.label}
-        name={props.name}
-        onChange={props.onChange}
-        placeholder={props.placeholder}
-        value={props.value}
-        variant="outlined"
-      />
-    </Grid>
-  )
-}
-
-function HLine(){
-  return (
-    <Grid item xs={12}><Divider></Divider></Grid>
-  )
-}
+import { Snackbar, IconButton, Radio, RadioGroup, FormLabel, FormControlLabel } from "@material-ui/core";
+import { DataDisplay, EditBox, HLine } from "./reusable/components";
+import DateFnsUtils from '@date-io/date-fns';
+import {
+  MuiPickersUtilsProvider,
+  KeyboardTimePicker,
+  KeyboardDatePicker,
+} from '@material-ui/pickers';
 
 class EditProfilePage extends Component {
   state = {
@@ -311,7 +282,6 @@ class EditProfilePage extends Component {
                         onChange={this.handleInputChange}
                         placeholder="John"
                         value={this.state.user.firstName}
-                        variant="outlined"
                       ></EditBox>
 
                       {/* Last name */}
@@ -323,34 +293,23 @@ class EditProfilePage extends Component {
                         onChange={this.handleInputChange}
                         placeholder="Doe"
                         value={this.state.user.lastName}
-                        variant="outlined"
                       ></EditBox>
 
                       {/* Gender */}
+
                       <Grid item>
-                        <TextField
-                          disabled={this.state.disabled}
-                          id="standard-gender"
-                          label="Gender"
-                          name="gender"
-                          onChange={this.handleInputChange}
-                          select
-                          value={this.state.user.gender}
-                          variant="outlined"
-                        >
-                          <MenuItem value="">
-                            <em>Gender</em>
-                          </MenuItem>
-                          <MenuItem value={"male"}>Male</MenuItem>
-                          <MenuItem value={"female"}>Female</MenuItem>
-                        </TextField>
+                        <FormLabel component="legend">Gender</FormLabel>
+                        <RadioGroup aria-label="gender" name="gender" value={this.state.user.gender} onChange={this.handleInputChange}>
+                          <FormControlLabel value="female" control={<Radio />} label="Female" />
+                          <FormControlLabel value="male" control={<Radio />} label="Male" />
+                          <FormControlLabel value="other" control={<Radio />} label="Other" />
+                        </RadioGroup>
                       </Grid>
 
                       {/* DOB */}
                       <EditBox
                         disabled={this.state.disabled}
                         id="standard-birthDate"
-                        label="Birth Date"
                         name="birthDate"
                         onChange={this.handleInputChange}
                         type="date"
@@ -398,6 +357,7 @@ class EditProfilePage extends Component {
                         disabled={this.state.disabled}
                         id="standard-description"
                         label="Describe Yourself"
+                        multiline={true}
                         name="description"
                         onChange={this.handleInputChange}
                         placeholder="About you"
@@ -433,7 +393,7 @@ class EditProfilePage extends Component {
                       <HLine></HLine>
                       <DataDisplay title="Address" label={this.state.user.address}></DataDisplay>
                       <HLine></HLine>
-                      <DataDisplay title="Description" label={this.state.user.description}></DataDisplay>
+                      <DataDisplay title="Description" label={this.state.user.description} multiline={true}></DataDisplay>
                       <HLine></HLine>
                       <DataDisplay title="Rate" label={"$" + this.state.user.rate + " an hour"}></DataDisplay>
                       <HLine></HLine>
