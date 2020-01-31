@@ -276,7 +276,6 @@ class EditProfilePage extends Component {
                         onChange={this.handleInputChange}
                         placeholder="John"
                         value={this.state.user.firstName}
-                        variant="outlined"
                       ></EditBox>
 
                       {/* Last name */}
@@ -288,7 +287,6 @@ class EditProfilePage extends Component {
                         onChange={this.handleInputChange}
                         placeholder="Doe"
                         value={this.state.user.lastName}
-                        variant="outlined"
                       ></EditBox>
 
                       {/* Gender */}
