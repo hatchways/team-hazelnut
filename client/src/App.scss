@@ -32,14 +32,6 @@ h1 {
   height: 70%;
 }
 
-.center {
-  text-align: center;
-}
-
-.font-medium{
-  font-size: large;
-}
-
 // Legend for codes below: 
 // m = margin, p = padding
 // t = top, b = bottom, r = right, l = left
@@ -102,7 +94,7 @@ h1 {
 }
 
 .container {
-  height: 100vh;
+  height: 40vh;
   width: 100%;
   @extend %screen-centering;
 }
@@ -143,6 +135,14 @@ h1 {
 
 .text-right {
   text-align: right;
+}
+
+.center {
+  text-align: center;
+}
+
+.font-medium{
+  font-size: large;
 }
 
 .submit-button {
