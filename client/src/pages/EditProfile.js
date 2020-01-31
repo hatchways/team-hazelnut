@@ -8,8 +8,14 @@ import TextField from "@material-ui/core/TextField";
 import Typography from '@material-ui/core/Typography';
 import axios from "axios";
 import jwt_decode from "jwt-decode";
-import { Snackbar, IconButton } from "@material-ui/core";
+import { Snackbar, IconButton, Radio, RadioGroup, FormLabel, FormControlLabel } from "@material-ui/core";
 import { DataDisplay, EditBox, HLine } from "./reusable/components";
+import DateFnsUtils from '@date-io/date-fns';
+import {
+  MuiPickersUtilsProvider,
+  KeyboardTimePicker,
+  KeyboardDatePicker,
+} from '@material-ui/pickers';
 
 class EditProfilePage extends Component {
   state = {
@@ -290,30 +296,20 @@ class EditProfilePage extends Component {
                       ></EditBox>
 
                       {/* Gender */}
+
                       <Grid item>
-                        <TextField
-                          disabled={this.state.disabled}
-                          id="standard-gender"
-                          label="Gender"
-                          name="gender"
-                          onChange={this.handleInputChange}
-                          select
-                          value={this.state.user.gender}
-                          variant="outlined"
-                        >
-                          <MenuItem value="">
-                            <em>Gender</em>
-                          </MenuItem>
-                          <MenuItem value={"male"}>Male</MenuItem>
-                          <MenuItem value={"female"}>Female</MenuItem>
-                        </TextField>
+                        <FormLabel component="legend">Gender</FormLabel>
+                        <RadioGroup aria-label="gender" name="gender" value={this.state.user.gender} onChange={this.handleInputChange}>
+                          <FormControlLabel value="female" control={<Radio />} label="Female" />
+                          <FormControlLabel value="male" control={<Radio />} label="Male" />
+                          <FormControlLabel value="other" control={<Radio />} label="Other" />
+                        </RadioGroup>
                       </Grid>
 
                       {/* DOB */}
                       <EditBox
                         disabled={this.state.disabled}
                         id="standard-birthDate"
-                        label="Birth Date"
                         name="birthDate"
                         onChange={this.handleInputChange}
                         type="date"

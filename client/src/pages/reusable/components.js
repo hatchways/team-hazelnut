@@ -26,6 +26,7 @@ export function EditBox(props) {
                 fullWidth={props.fullWidth}
                 id={props.id}
                 label={props.label}
+                labelId={props.labelId}
                 multiline={props.multiline}
                 name={props.name}
                 onChange={props.onChange}
