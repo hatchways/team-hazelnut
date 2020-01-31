@@ -102,16 +102,16 @@ class LoginPage extends Component {
                     </Grid>
                     <Grid item xs={12}>
                       <TextField
-                        name="email"
+                        fullWidth
                         id="outlined-email"
-                        placeholder="Email"
                         margin="normal"
-                        variant="outlined"
-                        type="email"
-                        value={this.state.email}
+                        name="email"
                         onChange={this.handleEmailChange}
                         onKeyDown={this.handleEnterButton}
-                        fullWidth
+                        placeholder="Email"
+                        type="email"
+                        value={this.state.email}
+                        variant="outlined"
                       />
                       <div style={{ color: "red" }}>
                         {this.state.emailError}
@@ -147,7 +147,6 @@ class LoginPage extends Component {
                         Login
                       </Button>
                     </Grid>
-                    <Grid item xs={2}></Grid>
 
                     <Grid item xs={12} className="center">
                       <p>
