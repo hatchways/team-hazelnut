@@ -14,7 +14,7 @@
   },
   "proxy": "http://localhost:3001",
   "dependencies": {
-    "aws-sdk": "^2.542.0",
+    "aws-sdk": "^2.814.0",
     "body-parser": "^1.19.0",
     "cookie-parser": "~1.4.4",
     "cors": "^2.8.5",
